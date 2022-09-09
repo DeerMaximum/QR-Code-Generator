@@ -44,5 +44,5 @@ This integration allows to create QR Codes with static or dynamic content.
 
 [hacs]: https://hacs.xyz
 [hacsbadge]: https://img.shields.io/badge/HACS-Custom-orange.svg?style=for-the-badge
-[releases-shield]: https://img.shields.io/github/release/custom-components/integration_blueprint.svg?style=for-the-badge
+[releases-shield]: https://img.shields.io/github/v/release/DeerMaximum/QR-Code-Generator.svg?style=for-the-badge
 [releases]: https://github.com/DeerMaximum/QR-Code-Generator/releases
