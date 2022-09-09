@@ -1,5 +1,5 @@
 pyqrcode==1.2.1
-pypng==0.0.21
+pypng==0.20220715.0
 pillow==9.2.0
 
 #Test will fail witout
