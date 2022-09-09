@@ -1,1 +1,1 @@
-"""Tests for integration_blueprint integration."""
+"""Test for the QR Generator integration."""

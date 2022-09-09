@@ -1,110 +1,345 @@
-"""Test integration_blueprint config flow."""
+"""Test the QR Generator config flow."""
+from __future__ import annotations
+
+from typing import Any
 from unittest.mock import patch
 
-from homeassistant import config_entries, data_entry_flow
-import pytest
+from homeassistant import data_entry_flow
+
+from homeassistant.config_entries import SOURCE_USER
+from homeassistant.const import CONF_NAME, CONF_VALUE_TEMPLATE
+from homeassistant.core import HomeAssistant
+
 from pytest_homeassistant_custom_component.common import MockConfigEntry
 
-from custom_components.integration_blueprint.const import (
-    BINARY_SENSOR,
+from custom_components.qr_generator.config_flow import ConfigFlow
+from custom_components.qr_generator.const import (
+    CONF_ADVANCED,
+    CONF_BACKGROUND_COLOR,
+    CONF_BORDER,
+    CONF_COLOR,
+    CONF_ERROR_CORRECTION,
+    CONF_SCALE,
+    DEFAULT_BACKGROUND_COLOR,
+    DEFAULT_BORDER,
+    DEFAULT_COLOR,
+    DEFAULT_ERROR_CORRECTION,
+    DEFAULT_SCALE,
     DOMAIN,
-    PLATFORMS,
-    SENSOR,
-    SWITCH,
 )
 
-from .const import MOCK_CONFIG
+DUMMY_DATA_SIMPLE: dict[str, Any] = {
+    CONF_NAME: "Test QR Code",
+    CONF_VALUE_TEMPLATE: "Sample content",
+    CONF_ADVANCED: False,
+}
+DUMMY_DATA_SIMPLE_ADVANCED: dict[str, Any] = {
+    CONF_NAME: "Test QR Code",
+    CONF_VALUE_TEMPLATE: "Sample content",
+    CONF_ADVANCED: True,
+}
+
+DUMMY_DATA_SIMPLE_INVALID_TEMPLATE: dict[str, Any] = {
+    CONF_NAME: "Test QR Code",
+    CONF_VALUE_TEMPLATE: "{{novalid template}}",
+    CONF_ADVANCED: False,
+}
+
+DUMMY_DATA_ADVANCED: dict[str, Any] = {
+    CONF_COLOR: DEFAULT_COLOR,
+    CONF_SCALE: DEFAULT_SCALE,
+    CONF_BORDER: DEFAULT_BORDER,
+    CONF_ERROR_CORRECTION: DEFAULT_ERROR_CORRECTION,
+    CONF_BACKGROUND_COLOR: DEFAULT_BACKGROUND_COLOR,
+}
+
+DUMMY_DATA_ADVANCED_INVALID_COLOR: dict[str, Any] = {
+    CONF_COLOR: "black",
+    CONF_SCALE: DEFAULT_SCALE,
+    CONF_BORDER: DEFAULT_BORDER,
+    CONF_ERROR_CORRECTION: DEFAULT_ERROR_CORRECTION,
+    CONF_BACKGROUND_COLOR: DEFAULT_BACKGROUND_COLOR,
+}
+
+DUMMY_ENTRY: dict[str, Any] = {
+    CONF_NAME: "Test QR Code",
+    CONF_VALUE_TEMPLATE: "Sample content",
+    CONF_ADVANCED: True,
+    CONF_COLOR: DEFAULT_COLOR,
+    CONF_SCALE: DEFAULT_SCALE,
+    CONF_BORDER: DEFAULT_BORDER,
+    CONF_ERROR_CORRECTION: DEFAULT_ERROR_CORRECTION,
+    CONF_BACKGROUND_COLOR: DEFAULT_BACKGROUND_COLOR,
+}
+
+DUMMY_ENTRY_CHANGE: dict[str, Any] = {
+    CONF_VALUE_TEMPLATE: "New test",
+    CONF_ADVANCED: False,
+}
+
+DUMMY_ENTRY_ADVANCED_CHANGE: dict[str, Any] = {
+    CONF_SCALE: 50,
+}
+
+DUMMY_ENTRY_UPDATED: dict[str, Any] = {
+    CONF_NAME: "Test QR Code",
+    CONF_VALUE_TEMPLATE: "New test",
+    CONF_ADVANCED: False,
+    CONF_COLOR: DEFAULT_COLOR,
+    CONF_SCALE: DEFAULT_SCALE,
+    CONF_BORDER: DEFAULT_BORDER,
+    CONF_ERROR_CORRECTION: DEFAULT_ERROR_CORRECTION,
+    CONF_BACKGROUND_COLOR: DEFAULT_BACKGROUND_COLOR,
+}
+
+DUMMY_ENTRY_ADVANCED_UPDATED: dict[str, Any] = {
+    CONF_NAME: "Test QR Code",
+    CONF_VALUE_TEMPLATE: "Sample content",
+    CONF_ADVANCED: True,
+    CONF_COLOR: DEFAULT_COLOR,
+    CONF_SCALE: 50,
+    CONF_BORDER: DEFAULT_BORDER,
+    CONF_ERROR_CORRECTION: DEFAULT_ERROR_CORRECTION,
+    CONF_BACKGROUND_COLOR: DEFAULT_BACKGROUND_COLOR,
+}
 
 
-# This fixture bypasses the actual setup of the integration
-# since we only want to test the config flow. We test the
-# actual functionality of the integration in other test modules.
-@pytest.fixture(autouse=True)
-def bypass_setup_fixture():
-    """Prevent setup."""
-    with patch(
-        "custom_components.integration_blueprint.async_setup",
-        return_value=True,
-    ), patch(
-        "custom_components.integration_blueprint.async_setup_entry",
-        return_value=True,
-    ):
-        yield
+async def test_show_set_form(hass: HomeAssistant) -> None:
+    """Test that the setup form is served."""
 
-
-# Here we simiulate a successful config flow from the backend.
-# Note that we use the `bypass_get_data` fixture here because
-# we want the config flow validation to succeed during the test.
-async def test_successful_config_flow(hass, bypass_get_data):
-    """Test a successful config flow."""
-    # Initialize a config flow
-    result = await hass.config_entries.flow.async_init(
-        DOMAIN, context={"source": config_entries.SOURCE_USER}
+    result: dict[str, Any] = await hass.config_entries.flow.async_init(
+        DOMAIN, context={"source": SOURCE_USER}
     )
 
-    # Check that the config flow shows the user form as the first step
     assert result["type"] == data_entry_flow.RESULT_TYPE_FORM
     assert result["step_id"] == "user"
 
-    # If a user were to enter `test_username` for username and `test_password`
-    # for password, it would result in this function call
-    result = await hass.config_entries.flow.async_configure(
-        result["flow_id"], user_input=MOCK_CONFIG
+
+async def test_step_user(hass: HomeAssistant) -> None:
+    """Test starting a flow by user with valid values."""
+
+    result: dict[str, Any] = await hass.config_entries.flow.async_init(
+        DOMAIN, context={"source": SOURCE_USER}, data=DUMMY_DATA_SIMPLE
     )
 
-    # Check that the config flow is complete and a new entry is created with
-    # the input data
     assert result["type"] == data_entry_flow.RESULT_TYPE_CREATE_ENTRY
-    assert result["title"] == "test_username"
-    assert result["data"] == MOCK_CONFIG
-    assert result["result"]
+    assert result["title"] == DUMMY_DATA_SIMPLE[CONF_NAME]
 
 
-# In this case, we want to simulate a failure during the config flow.
-# We use the `error_on_get_data` mock instead of `bypass_get_data`
-# (note the function parameters) to raise an Exception during
-# validation of the input config.
-async def test_failed_config_flow(hass, error_on_get_data):
-    """Test a failed config flow due to credential validation failure."""
-    result = await hass.config_entries.flow.async_init(
-        DOMAIN, context={"source": config_entries.SOURCE_USER}
+async def test_step_user_template_error(hass: HomeAssistant) -> None:
+    """Test starting a flow by user with an invalid template."""
+
+    result: dict[str, Any] = await hass.config_entries.flow.async_init(
+        DOMAIN, context={"source": SOURCE_USER}, data=DUMMY_DATA_SIMPLE_INVALID_TEMPLATE
     )
 
     assert result["type"] == data_entry_flow.RESULT_TYPE_FORM
     assert result["step_id"] == "user"
+    assert result["errors"] == {"base": "invalid_template"}
 
-    result = await hass.config_entries.flow.async_configure(
-        result["flow_id"], user_input=MOCK_CONFIG
+
+async def test_show_set_form_advanced_from_user(hass: HomeAssistant) -> None:
+    """Test that the advanced form is served as a step."""
+
+    result: dict[str, Any] = await hass.config_entries.flow.async_init(
+        DOMAIN, context={"source": "user"}, data=DUMMY_DATA_SIMPLE_ADVANCED
     )
 
     assert result["type"] == data_entry_flow.RESULT_TYPE_FORM
-    assert result["errors"] == {"base": "auth"}
+    assert result["step_id"] == "advanced"
 
 
-# Our config flow also has an options flow, so we must test it as well.
-async def test_options_flow(hass):
-    """Test an options flow."""
-    # Create a new MockConfigEntry and add to HASS (we're bypassing config
-    # flow entirely)
-    entry = MockConfigEntry(domain=DOMAIN, data=MOCK_CONFIG, entry_id="test")
-    entry.add_to_hass(hass)
+async def test_show_set_form_advanced(hass: HomeAssistant) -> None:
+    """Test that the advanced form is served."""
 
-    # Initialize an options flow
-    result = await hass.config_entries.options.async_init(entry.entry_id)
-
-    # Verify that the first options step is a user form
-    assert result["type"] == data_entry_flow.RESULT_TYPE_FORM
-    assert result["step_id"] == "user"
-
-    # Enter some fake data into the form
-    result = await hass.config_entries.options.async_configure(
-        result["flow_id"],
-        user_input={platform: platform != SENSOR for platform in PLATFORMS},
+    result: dict[str, Any] = await hass.config_entries.flow.async_init(
+        DOMAIN, context={"source": "advanced"}
     )
 
-    # Verify that the flow finishes
-    assert result["type"] == data_entry_flow.RESULT_TYPE_CREATE_ENTRY
-    assert result["title"] == "test_username"
+    assert result["type"] == data_entry_flow.RESULT_TYPE_FORM
+    assert result["step_id"] == "advanced"
 
-    # Verify that the options were updated
-    assert entry.options == {BINARY_SENSOR: True, SENSOR: False, SWITCH: True}
+
+async def test_step_advanced(hass: HomeAssistant) -> None:
+    """Test starting a flow by advanced with valid values."""
+
+    with patch.object(ConfigFlow, "override_config", DUMMY_DATA_SIMPLE):
+
+        result: dict[str, Any] = await hass.config_entries.flow.async_init(
+            DOMAIN, context={"source": "advanced"}, data=DUMMY_DATA_ADVANCED
+        )
+
+        assert result["type"] == data_entry_flow.RESULT_TYPE_CREATE_ENTRY
+        assert result["title"] == DUMMY_DATA_SIMPLE[CONF_NAME]
+
+
+async def test_step_advanced_invalid_color(hass: HomeAssistant) -> None:
+    """Test starting a flow by advanced with an invalid color."""
+
+    with patch.object(ConfigFlow, "override_config", DUMMY_DATA_SIMPLE):
+
+        result: dict[str, Any] = await hass.config_entries.flow.async_init(
+            DOMAIN,
+            context={"source": "advanced"},
+            data=DUMMY_DATA_ADVANCED_INVALID_COLOR,
+        )
+
+        assert result["type"] == data_entry_flow.RESULT_TYPE_FORM
+        assert result["step_id"] == "advanced"
+        assert result["errors"] == {"base": "invalid_color"}
+
+
+async def test_options_flow_init(hass: HomeAssistant) -> None:
+    """Test config flow options."""
+    config_entry = MockConfigEntry(
+        domain=DOMAIN,
+        title=DUMMY_ENTRY[CONF_NAME],
+        data=DUMMY_ENTRY,
+    )
+    config_entry.add_to_hass(hass)
+
+    with patch("custom_components.qr_generator.async_setup_entry", return_value=True):
+        result = await hass.config_entries.options.async_init(config_entry.entry_id)
+
+        await hass.config_entries.async_setup(config_entry.entry_id)
+        await hass.async_block_till_done()
+
+        assert result["type"] == data_entry_flow.RESULT_TYPE_FORM
+        assert result["step_id"] == "init"
+
+        result = await hass.config_entries.options.async_configure(
+            result["flow_id"],
+            user_input=DUMMY_ENTRY_CHANGE,
+        )
+
+        assert result["type"] == data_entry_flow.RESULT_TYPE_CREATE_ENTRY
+        assert dict(config_entry.options) == DUMMY_ENTRY_UPDATED
+
+
+async def test_options_flow_invalid_template(hass: HomeAssistant) -> None:
+    """Test config flow options with invalid template."""
+    config_entry = MockConfigEntry(
+        domain=DOMAIN,
+        title=DUMMY_ENTRY[CONF_NAME],
+        data=DUMMY_ENTRY,
+    )
+    config_entry.add_to_hass(hass)
+
+    with patch("custom_components.qr_generator.async_setup_entry", return_value=True):
+        result = await hass.config_entries.options.async_init(config_entry.entry_id)
+
+        await hass.config_entries.async_setup(config_entry.entry_id)
+        await hass.async_block_till_done()
+
+        assert result["type"] == data_entry_flow.RESULT_TYPE_FORM
+        assert result["step_id"] == "init"
+
+        result = await hass.config_entries.options.async_configure(
+            result["flow_id"],
+            user_input=DUMMY_DATA_SIMPLE_INVALID_TEMPLATE,
+        )
+
+        assert result["type"] == data_entry_flow.RESULT_TYPE_FORM
+        assert result["step_id"] == "init"
+        assert result["errors"] == {"base": "invalid_template"}
+
+
+async def test_options_flow_to_advanced(hass: HomeAssistant) -> None:
+    """Test config flow options."""
+    config_entry = MockConfigEntry(
+        domain=DOMAIN,
+        title=DUMMY_ENTRY[CONF_NAME],
+        data=DUMMY_ENTRY,
+    )
+    config_entry.add_to_hass(hass)
+
+    with patch("custom_components.qr_generator.async_setup_entry", return_value=True):
+        result = await hass.config_entries.options.async_init(config_entry.entry_id)
+
+        await hass.config_entries.async_setup(config_entry.entry_id)
+        await hass.async_block_till_done()
+
+        assert result["type"] == data_entry_flow.RESULT_TYPE_FORM
+        assert result["step_id"] == "init"
+
+        result = await hass.config_entries.options.async_configure(
+            result["flow_id"],
+            user_input=DUMMY_DATA_SIMPLE_ADVANCED,
+        )
+
+        assert result["type"] == data_entry_flow.RESULT_TYPE_FORM
+        assert result["step_id"] == "advanced"
+        assert result["errors"] == {}
+
+
+async def test_options_flow_advanced(hass: HomeAssistant) -> None:
+    """Test config flow options."""
+    config_entry = MockConfigEntry(
+        domain=DOMAIN,
+        title=DUMMY_ENTRY[CONF_NAME],
+        data=DUMMY_ENTRY,
+    )
+    config_entry.add_to_hass(hass)
+
+    with patch("custom_components.qr_generator.async_setup_entry", return_value=True):
+        result = await hass.config_entries.options.async_init(config_entry.entry_id)
+
+        await hass.config_entries.async_setup(config_entry.entry_id)
+        await hass.async_block_till_done()
+
+        assert result["type"] == data_entry_flow.RESULT_TYPE_FORM
+        assert result["step_id"] == "init"
+
+        result = await hass.config_entries.options.async_configure(
+            result["flow_id"],
+            user_input=DUMMY_DATA_SIMPLE_ADVANCED,
+        )
+
+        assert result["type"] == data_entry_flow.RESULT_TYPE_FORM
+        assert result["step_id"] == "advanced"
+        assert result["errors"] == {}
+
+        result = await hass.config_entries.options.async_configure(
+            result["flow_id"],
+            user_input=DUMMY_ENTRY_ADVANCED_CHANGE,
+        )
+
+        assert result["type"] == data_entry_flow.RESULT_TYPE_CREATE_ENTRY
+        assert dict(config_entry.options) == DUMMY_ENTRY_ADVANCED_UPDATED
+
+
+async def test_options_flow_advanced_invalid_color(hass: HomeAssistant) -> None:
+    """Test config flow options with invalid template."""
+    config_entry = MockConfigEntry(
+        domain=DOMAIN,
+        title=DUMMY_ENTRY[CONF_NAME],
+        data=DUMMY_ENTRY,
+    )
+    config_entry.add_to_hass(hass)
+
+    with patch("custom_components.qr_generator.async_setup_entry", return_value=True):
+        result = await hass.config_entries.options.async_init(config_entry.entry_id)
+
+        await hass.config_entries.async_setup(config_entry.entry_id)
+        await hass.async_block_till_done()
+
+        assert result["type"] == data_entry_flow.RESULT_TYPE_FORM
+        assert result["step_id"] == "init"
+
+        result = await hass.config_entries.options.async_configure(
+            result["flow_id"],
+            user_input=DUMMY_DATA_SIMPLE_ADVANCED,
+        )
+
+        assert result["type"] == data_entry_flow.RESULT_TYPE_FORM
+        assert result["step_id"] == "advanced"
+        assert result["errors"] == {}
+
+        result = await hass.config_entries.options.async_configure(
+            result["flow_id"],
+            user_input=DUMMY_DATA_ADVANCED_INVALID_COLOR,
+        )
+
+        assert result["type"] == data_entry_flow.RESULT_TYPE_FORM
+        assert result["step_id"] == "advanced"
+        assert result["errors"] == {"base": "invalid_color"}
