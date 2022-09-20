@@ -14,8 +14,16 @@ This integration allows to create QR Codes with static or dynamic content.
 {% if not installed %}
 ## Installation
 
+### Method 1:
+
+<br>
+
+[![Open your Home Assistant instance and open a repository inside the Home Assistant Community Store.](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=DeerMaximum&repository=QR-Code-Generator&category=integration)
+
+### Method 2:
+
 1. Click install.
-1. In the HA UI go to "Configuration" -> "Integrations" click "+" and search for "QR-Code".
+2. In the HA UI go to "Configuration" -> "Integrations" click "+" and search for "QR-Code".
 
 {% endif %}
 
@@ -43,6 +51,6 @@ This integration allows to create QR Codes with static or dynamic content.
 | `error_correction` | *(str)* Strength of error correction. Possible values: <br> L<br> M <br> Q  <br> H |
 
 [hacs]: https://hacs.xyz
-[hacsbadge]: https://img.shields.io/badge/HACS-Custom-orange.svg?style=for-the-badge
+[hacsbadge]: https://img.shields.io/badge/HACS-Default-41BDF5.svg?style=for-the-badge
 [releases-shield]: https://img.shields.io/github/v/release/DeerMaximum/QR-Code-Generator.svg?style=for-the-badge
 [releases]: https://github.com/DeerMaximum/QR-Code-Generator/releases
