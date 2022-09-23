@@ -6,7 +6,7 @@ This integration allows to create QR Codes with static or dynamic content.
 
 ## Features
 * Static content
-* Dynamic content with the help of Tempaltes
+* Dynamic content with the help of Templates
 * Custom QR-Code color
 * Custom QR-Code background color
 * Error correction adjustment
