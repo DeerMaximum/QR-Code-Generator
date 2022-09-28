@@ -14,13 +14,13 @@ This integration allows to create QR Codes with static or dynamic content.
 {% if not installed %}
 ## Installation
 
-### Method 1:
+### Step 1:
 
 <br>
 
 [![Open your Home Assistant instance and open a repository inside the Home Assistant Community Store.](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=DeerMaximum&repository=QR-Code-Generator&category=integration)
 
-### Method 2:
+### Step 2 (**Don't forget**):
 
 1. Click install.
 2. In the HA UI go to "Configuration" -> "Integrations" click "+" and search for "QR-Code".
