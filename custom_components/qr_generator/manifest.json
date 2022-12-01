@@ -4,10 +4,10 @@
   "config_flow": true,
   "documentation": "https://github.com/DeerMaximum/QR-Code-Generator",
   "issue_tracker" : "https://github.com/DeerMaximum/QR-Code-Generator/issues",
-  "requirements": ["pyqrcode==1.2.1", "pypng==0.0.21", "pillow==9.2.0"],
+  "requirements": ["pyqrcode==1.2.1", "pypng==0.0.21", "pillow==9.3.0"],
   "dependencies": [],
   "codeowners": ["@DeerMaximum"],
   "iot_class": "calculated",
   "loggers": ["qr_generator"],
-  "version" : "1.0.0"
+  "version" : "1.0.2"
 }
