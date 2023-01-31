@@ -26,6 +26,13 @@ Copy the `custom_components/qr_generator` directory to your `custom_components` 
 
 {% endif %}
 
+## Example configuration
+
+### For wifi access
+
+Name: `My wifi access` <br>
+Content: `WIFI:T:WPA2;S:MyNetworkName;P:ThisIsMyPassword;H:true;`
+
 ## Details
 
 ### Options
