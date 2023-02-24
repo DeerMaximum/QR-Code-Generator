@@ -1,13 +1,13 @@
 {
-  "domain": "qr_generator",
-  "name": "QR-Code Generator",
-  "config_flow": true,
-  "documentation": "https://github.com/DeerMaximum/QR-Code-Generator",
-  "issue_tracker" : "https://github.com/DeerMaximum/QR-Code-Generator/issues",
-  "requirements": ["pyqrcode==1.2.1", "pypng==0.0.21", "pillow==9.4.0"],
-  "dependencies": [],
   "codeowners": ["@DeerMaximum"],
+  "config_flow": true,
+  "dependencies": [],
+  "documentation": "https://github.com/DeerMaximum/QR-Code-Generator",
+  "domain": "qr_generator",
   "iot_class": "calculated",
+  "issue_tracker" : "https://github.com/DeerMaximum/QR-Code-Generator/issues",
   "loggers": ["qr_generator"],
+  "name": "QR-Code Generator",
+  "requirements": ["pyqrcode==1.2.1", "pypng==0.0.21", "pillow==9.4.0"],
   "version" : "1.0.3"
 }
