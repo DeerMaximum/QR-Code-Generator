@@ -1,6 +1,7 @@
 """Test the QR Generator camera."""
 from typing import Any
 
+import pytest
 from homeassistant.components.camera import async_get_image
 
 from homeassistant.config_entries import ConfigEntryState
@@ -42,7 +43,7 @@ DUMMY_ENTRY: dict[str, Any] = {
     CONF_BACKGROUND_COLOR: DEFAULT_BACKGROUND_COLOR,
 }
 
-
+@pytest.mark.asyncio
 async def test_camera(hass: HomeAssistant) -> None:
     """Test the creation and values of the camera."""
     config_entry: MockConfigEntry = MockConfigEntry(
