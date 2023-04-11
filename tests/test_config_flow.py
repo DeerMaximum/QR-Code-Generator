@@ -4,6 +4,7 @@ from __future__ import annotations
 from typing import Any
 from unittest.mock import patch
 
+import pytest
 from homeassistant import data_entry_flow
 
 from homeassistant.config_entries import SOURCE_USER
@@ -103,7 +104,7 @@ DUMMY_ENTRY_ADVANCED_UPDATED: dict[str, Any] = {
     CONF_BACKGROUND_COLOR: DEFAULT_BACKGROUND_COLOR,
 }
 
-
+@pytest.mark.asyncio
 async def test_show_set_form(hass: HomeAssistant) -> None:
     """Test that the setup form is served."""
 
@@ -115,6 +116,7 @@ async def test_show_set_form(hass: HomeAssistant) -> None:
     assert result["step_id"] == "user"
 
 
+@pytest.mark.asyncio
 async def test_step_user(hass: HomeAssistant) -> None:
     """Test starting a flow by user with valid values."""
 
@@ -126,6 +128,7 @@ async def test_step_user(hass: HomeAssistant) -> None:
     assert result["title"] == DUMMY_DATA_SIMPLE[CONF_NAME]
 
 
+@pytest.mark.asyncio
 async def test_step_user_template_error(hass: HomeAssistant) -> None:
     """Test starting a flow by user with an invalid template."""
 
@@ -138,6 +141,7 @@ async def test_step_user_template_error(hass: HomeAssistant) -> None:
     assert result["errors"] == {"base": "invalid_template"}
 
 
+@pytest.mark.asyncio
 async def test_show_set_form_advanced_from_user(hass: HomeAssistant) -> None:
     """Test that the advanced form is served as a step."""
 
@@ -149,6 +153,7 @@ async def test_show_set_form_advanced_from_user(hass: HomeAssistant) -> None:
     assert result["step_id"] == "advanced"
 
 
+@pytest.mark.asyncio
 async def test_show_set_form_advanced(hass: HomeAssistant) -> None:
     """Test that the advanced form is served."""
 
@@ -160,6 +165,7 @@ async def test_show_set_form_advanced(hass: HomeAssistant) -> None:
     assert result["step_id"] == "advanced"
 
 
+@pytest.mark.asyncio
 async def test_step_advanced(hass: HomeAssistant) -> None:
     """Test starting a flow by advanced with valid values."""
 
@@ -173,6 +179,7 @@ async def test_step_advanced(hass: HomeAssistant) -> None:
         assert result["title"] == DUMMY_DATA_SIMPLE[CONF_NAME]
 
 
+@pytest.mark.asyncio
 async def test_step_advanced_invalid_color(hass: HomeAssistant) -> None:
     """Test starting a flow by advanced with an invalid color."""
 
@@ -189,6 +196,7 @@ async def test_step_advanced_invalid_color(hass: HomeAssistant) -> None:
         assert result["errors"] == {"base": "invalid_color"}
 
 
+@pytest.mark.asyncio
 async def test_options_flow_init(hass: HomeAssistant) -> None:
     """Test config flow options."""
     config_entry = MockConfigEntry(
@@ -216,6 +224,7 @@ async def test_options_flow_init(hass: HomeAssistant) -> None:
         assert dict(config_entry.options) == DUMMY_ENTRY_UPDATED
 
 
+@pytest.mark.asyncio
 async def test_options_flow_invalid_template(hass: HomeAssistant) -> None:
     """Test config flow options with invalid template."""
     config_entry = MockConfigEntry(
@@ -244,6 +253,7 @@ async def test_options_flow_invalid_template(hass: HomeAssistant) -> None:
         assert result["errors"] == {"base": "invalid_template"}
 
 
+@pytest.mark.asyncio
 async def test_options_flow_to_advanced(hass: HomeAssistant) -> None:
     """Test config flow options."""
     config_entry = MockConfigEntry(
@@ -272,6 +282,7 @@ async def test_options_flow_to_advanced(hass: HomeAssistant) -> None:
         assert result["errors"] == {}
 
 
+@pytest.mark.asyncio
 async def test_options_flow_advanced(hass: HomeAssistant) -> None:
     """Test config flow options."""
     config_entry = MockConfigEntry(
@@ -308,6 +319,7 @@ async def test_options_flow_advanced(hass: HomeAssistant) -> None:
         assert dict(config_entry.options) == DUMMY_ENTRY_ADVANCED_UPDATED
 
 
+@pytest.mark.asyncio
 async def test_options_flow_advanced_invalid_color(hass: HomeAssistant) -> None:
     """Test config flow options with invalid template."""
     config_entry = MockConfigEntry(
