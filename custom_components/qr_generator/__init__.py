@@ -7,7 +7,7 @@ from homeassistant.core import HomeAssistant
 
 from .const import DOMAIN
 
-PLATFORMS: list[str] = [Platform.CAMERA]
+PLATFORMS: list[str] = [Platform.IMAGE]
 
 
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
