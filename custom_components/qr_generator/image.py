@@ -1,4 +1,4 @@
-"""QR Generator camera platform."""
+"""QR Generator image platform."""
 
 from __future__ import annotations
 
@@ -8,7 +8,8 @@ from typing import Any
 from PIL import ImageColor
 import pyqrcode
 
-from homeassistant.components.camera import Camera
+from homeassistant.util import dt as dt_util
+from homeassistant.components.image import ImageEntity
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import CONF_NAME, CONF_VALUE_TEMPLATE
 from homeassistant.core import HomeAssistant, callback
@@ -44,17 +45,17 @@ async def async_setup_entry(
 ) -> None:
     """Set up entries."""
 
-    entity = QRCamera(config_entry, hass)
+    entity = QRImage(config_entry, hass)
 
     async_add_entities([entity])
 
 
-class QRCamera(Camera):
+class QRImage(ImageEntity):
     """Representation of a QR code."""
 
     def __init__(self, entry: ConfigEntry, hass: HomeAssistant) -> None:
         """Initialize the camera."""
-        super().__init__()
+        super().__init__(hass)
 
         self.hass: HomeAssistant = hass
 
@@ -80,6 +81,7 @@ class QRCamera(Camera):
 
         self._attr_name: str = entry.data[CONF_NAME]
         self._attr_unique_id: str = f"{entry.entry_id}-qr-code"
+        self._attr_content_type: str = "image/png"
 
     def _render(self) -> None:
         """Render template."""
@@ -89,10 +91,10 @@ class QRCamera(Camera):
         """Register callbacks."""
 
         self._render()
-        self._refresh()
+        await self._refresh()
 
         @callback
-        def _update(entity: Any, old_state: Any, new_state: Any) -> None:
+        async def _update(entity: Any, old_state: Any, new_state: Any) -> None:
             """Handle state changes."""
             if old_state is None or new_state is None:
                 return
@@ -101,20 +103,19 @@ class QRCamera(Camera):
                 return
 
             self._render()
-            self._refresh()
+            await self._refresh()
 
         async_track_state_change(
             self.hass, list(self.rendered_template.entities), _update
         )
 
-    def camera_image(
-        self, width: int | None = None, height: int | None = None
-    ) -> bytes | None:
-        """Return bytes of camera image."""
+    async def async_image(self) -> bytes | None:
+        """Return bytes of image."""
         return self.image.getvalue()
 
-    def _refresh(self) -> None:
+    async def _refresh(self) -> None:
         """Create the QR code."""
+
         _LOGGER.debug('Print "%s" with: %s', self.name, self.rendered_template.result())
 
         code = pyqrcode.create(
@@ -129,6 +130,9 @@ class QRCamera(Camera):
             background=self.background_color,
             quiet_zone=self.border,
         )
+
+        self._attr_image_last_updated = dt_util.utcnow()
+        self.async_write_ha_state()
 
     @property
     def extra_state_attributes(self) -> dict[str, Any]:
