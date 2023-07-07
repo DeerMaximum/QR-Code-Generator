@@ -1,11 +1,10 @@
-"""Test the QR Generator camera."""
+"""Test the QR Generator image."""
 from typing import Any
 
 import pytest
-from homeassistant.components.camera import async_get_image
 
 from homeassistant.config_entries import ConfigEntryState
-from homeassistant.const import CONF_NAME, CONF_VALUE_TEMPLATE, STATE_IDLE
+from homeassistant.const import CONF_NAME, CONF_VALUE_TEMPLATE
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers import entity_registry as er
 
@@ -44,8 +43,8 @@ DUMMY_ENTRY: dict[str, Any] = {
 }
 
 @pytest.mark.asyncio
-async def test_camera(hass: HomeAssistant) -> None:
-    """Test the creation and values of the camera."""
+async def test_image(hass: HomeAssistant) -> None:
+    """Test the creation and values of the image."""
     config_entry: MockConfigEntry = MockConfigEntry(
         domain=DOMAIN, title="NINA", data=DUMMY_ENTRY
     )
@@ -58,10 +57,9 @@ async def test_camera(hass: HomeAssistant) -> None:
 
     assert config_entry.state == ConfigEntryState.LOADED
 
-    state = hass.states.get("camera.test_qr_code")
-    entry = entity_registry.async_get("camera.test_qr_code")
+    state = hass.states.get("image.test_qr_code")
+    entry = entity_registry.async_get("image.test_qr_code")
 
-    assert state.state == STATE_IDLE
     assert state.attributes.get(ATTR_TEXT) == "Sample content"
     assert state.attributes.get(ATTR_COLOR) == DEFAULT_COLOR
     assert state.attributes.get(ATTR_SCALE) == DEFAULT_SCALE
@@ -70,7 +68,3 @@ async def test_camera(hass: HomeAssistant) -> None:
     assert state.attributes.get(ATTR_BACKGROUND_COLOR) == DEFAULT_BACKGROUND_COLOR
 
     assert entry.unique_id == f"{config_entry.entry_id}-qr-code"
-
-    image = await async_get_image(hass, "camera.test_qr_code", timeout=1)
-
-    assert image.content
