@@ -51,6 +51,7 @@ jobs:
             -qq \
             --timeout=9 \
             --durations=10 \
+            --asyncio-mode=auto \
             -n auto \
             --cov custom_components.qr_generator \
             -o console_output_style=count \
