@@ -33,6 +33,11 @@ Copy the `custom_components/qr_generator` directory to your `custom_components` 
 Name: `My wifi access` <br>
 Content: `WIFI:T:WPA2;S:MyNetworkName;P:ThisIsMyPassword;H:true;`
 
+### For wifi access with template
+
+Name: `My wifi access` <br>
+Content: `WIFI:T:WPA2;S:MyNetworkName;P:{{states("input_text.wlan_password")}};H:true;`
+
 ## Details
 
 ### Options
