@@ -38,6 +38,8 @@ Content: `WIFI:T:WPA2;S:MyNetworkName;P:ThisIsMyPassword;H:true;`
 Name: `My wifi access` <br>
 Content: `WIFI:T:WPA2;S:MyNetworkName;P:{{states("input_text.wlan_password")}};H:true;`
 
+> To update the QR code, simply change the value of `input_text.wlan_password`.
+
 ## Details
 
 ### Options
