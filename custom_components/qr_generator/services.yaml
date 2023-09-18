@@ -1,0 +1,20 @@
+save:
+  name: Save current image
+  description: Save the current image to a path
+  fields:
+    entity_id:
+      name: Entity
+      description: Identifier of the image entity.
+      example: "image.qr_code"
+      required: true
+      selector:
+        entity:
+          integration: qr_generator
+          domain: image
+    filename:
+      required: true
+      name: Filename
+      description: Target filename.
+      example: "/tmp/snapshot_{{ entity_id.name }}.mp4"
+      selector:
+        text:
