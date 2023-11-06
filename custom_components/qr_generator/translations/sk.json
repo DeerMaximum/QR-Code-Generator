@@ -1,0 +1,56 @@
+{
+    "config": {
+        "error": {
+            "invalid_color": "Invalid color",
+            "invalid_template": "Invalid template",
+            "unknown": "Unexpected error"
+        },
+        "step": {
+            "advanced": {
+                "data": {
+                    "background_color": "Background color",
+                    "border": "Border",
+                    "color": "Color",
+                    "error_correction": "Error correction:",
+                    "scale": "Scale"
+                },
+                "title": "Advanced settings"
+            },
+            "user": {
+                "data": {
+                    "advanced": "Pokročilé nastavenia",
+                    "name": "Názov",
+                    "value_template": "Obsah (text alebo šablóna)"
+                },
+                "title": "Vytvoriť QR kód"
+            }
+        }
+    },
+    "options": {
+        "error": {
+            "invalid_color": "Neplatná farba",
+            "invalid_template": "Neplatná šablóna",
+            "unknown": "Neočakávaná chyba"
+        },
+        "step": {
+            "advanced": {
+                "data": {
+                    "background_color": "Farba pozadia",
+                    "border": "Okraj",
+                    "color": "Farba",
+                    "error_correction": "Korekcia chyby:",
+                    "scale": "Mierka"
+                },
+                "title": "Pokročilé nastavenia"
+            },
+            "init": {
+                "data": {
+                    "advanced": "Pokročilé nastavenia",
+                    "name": "Názov",
+                    "value_template": "Obsah (text alebo šablóna)"
+                },
+                "title": "Upraviť QR kód"
+            }
+        }
+    }
+}
