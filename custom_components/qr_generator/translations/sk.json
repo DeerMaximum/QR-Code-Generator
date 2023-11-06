@@ -1,20 +1,20 @@
 {
     "config": {
         "error": {
-            "invalid_color": "Invalid color",
-            "invalid_template": "Invalid template",
-            "unknown": "Unexpected error"
+            "invalid_color": "Neplatná farba",
+            "invalid_template": "Neplatná šablóna",
+            "unknown": "Neočakávaná chyba"
         },
         "step": {
             "advanced": {
                 "data": {
-                    "background_color": "Background color",
-                    "border": "Border",
-                    "color": "Color",
-                    "error_correction": "Error correction:",
-                    "scale": "Scale"
+                    "background_color": "Farba pozadia",
+                    "border": "Okraj",
+                    "color": "Farba",
+                    "error_correction": "Korekcia chyby:",
+                    "scale": "Mierka"
                 },
-                "title": "Advanced settings"
+                "title": "Pokročilé nastavenia"
             },
             "user": {
                 "data": {
