@@ -1,6 +1,6 @@
 pyqrcode==1.2.1
 pypng==0.20220715.0
-pillow==10.1.0
+pillow==10.2.0
 
 #Test will fail witout
 aiohttp_cors
