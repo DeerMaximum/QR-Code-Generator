@@ -26,14 +26,20 @@ def register_services(hass: HomeAssistant) -> None:
                 f"Cannot write `{filepath}`, no access to path; `allowlist_external_dirs` may need to be adjusted in `configuration.yaml`"
             )
 
-        platform = async_get_platforms(hass, DOMAIN)
+        platforms = async_get_platforms(hass, DOMAIN)
 
-        if len(platform) < 1:
+        if len(platforms) < 1:
             raise HomeAssistantError(
                 f"Integration not found: {DOMAIN}"
             )
 
-        entity: ImageEntity | None = platform[0].entities.get(entity_id, None)
+        entity: ImageEntity | None = None
+
+        for platform in platforms:
+            entity_tmp: ImageEntity | None = platform.entities.get(entity_id, None)
+            if entity_tmp is not None:
+                entity = entity_tmp
+                break
 
         if not entity:
             raise HomeAssistantError(
