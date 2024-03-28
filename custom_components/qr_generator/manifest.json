@@ -9,5 +9,5 @@
   "issue_tracker" : "https://github.com/DeerMaximum/QR-Code-Generator/issues",
   "loggers": ["qr_generator"],
   "requirements": ["pyqrcode==1.2.1", "pypng==0.0.21", "pillow==10.2.0"],
-  "version" : "2.1.6"
+  "version" : "2.1.7"
 }
