@@ -1,5 +1,5 @@
 {
     "name": "QR-Code Generator",
     "render_readme": true,
-    "homeassistant": "2024.2.0b0"
+    "homeassistant": "2024.4.4"
 }
