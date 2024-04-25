@@ -15,7 +15,7 @@ from homeassistant.const import CONF_NAME, CONF_VALUE_TEMPLATE
 from homeassistant.core import HomeAssistant, callback
 from homeassistant.helpers import template
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
-from homeassistant.helpers.event import async_track_state_change
+from homeassistant.helpers.event import async_track_state_change, async_track_state_change_event
 
 from .const import (
     _LOGGER,
@@ -105,7 +105,7 @@ class QRImage(ImageEntity):
             self._render()
             await self._refresh()
 
-        async_track_state_change(
+        async_track_state_change_event(
             self.hass, list(self.rendered_template.entities), _update
         )
 
