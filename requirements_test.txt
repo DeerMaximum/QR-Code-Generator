@@ -5,4 +5,4 @@ pillow==10.3.0
 #Test will fail witout
 aiohttp_cors
 
-pytest-homeassistant-custom-component==0.13.116
+pytest-homeassistant-custom-component==0.13.141
