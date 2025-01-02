@@ -5,12 +5,10 @@ from typing import Any
 from unittest.mock import patch
 
 import pytest
-from homeassistant import data_entry_flow
-
 from homeassistant.config_entries import SOURCE_USER
 from homeassistant.const import CONF_NAME, CONF_VALUE_TEMPLATE
 from homeassistant.core import HomeAssistant
-
+from homeassistant.data_entry_flow import FlowResultType
 from pytest_homeassistant_custom_component.common import MockConfigEntry
 
 from custom_components.qr_generator.config_flow import ConfigFlow
@@ -112,7 +110,7 @@ async def test_show_set_form(hass: HomeAssistant) -> None:
         DOMAIN, context={"source": SOURCE_USER}
     )
 
-    assert result["type"] == data_entry_flow.RESULT_TYPE_FORM
+    assert result["type"] == FlowResultType.FORM
     assert result["step_id"] == "user"
 
 
@@ -124,7 +122,7 @@ async def test_step_user(hass: HomeAssistant) -> None:
         DOMAIN, context={"source": SOURCE_USER}, data=DUMMY_DATA_SIMPLE
     )
 
-    assert result["type"] == data_entry_flow.RESULT_TYPE_CREATE_ENTRY
+    assert result["type"] == FlowResultType.CREATE_ENTRY
     assert result["title"] == DUMMY_DATA_SIMPLE[CONF_NAME]
 
 
@@ -136,7 +134,7 @@ async def test_step_user_template_error(hass: HomeAssistant) -> None:
         DOMAIN, context={"source": SOURCE_USER}, data=DUMMY_DATA_SIMPLE_INVALID_TEMPLATE
     )
 
-    assert result["type"] == data_entry_flow.RESULT_TYPE_FORM
+    assert result["type"] == FlowResultType.FORM
     assert result["step_id"] == "user"
     assert result["errors"] == {"base": "invalid_template"}
 
@@ -149,7 +147,7 @@ async def test_show_set_form_advanced_from_user(hass: HomeAssistant) -> None:
         DOMAIN, context={"source": "user"}, data=DUMMY_DATA_SIMPLE_ADVANCED
     )
 
-    assert result["type"] == data_entry_flow.RESULT_TYPE_FORM
+    assert result["type"] == FlowResultType.FORM
     assert result["step_id"] == "advanced"
 
 
@@ -161,7 +159,7 @@ async def test_show_set_form_advanced(hass: HomeAssistant) -> None:
         DOMAIN, context={"source": "advanced"}
     )
 
-    assert result["type"] == data_entry_flow.RESULT_TYPE_FORM
+    assert result["type"] == FlowResultType.FORM
     assert result["step_id"] == "advanced"
 
 
@@ -175,7 +173,7 @@ async def test_step_advanced(hass: HomeAssistant) -> None:
             DOMAIN, context={"source": "advanced"}, data=DUMMY_DATA_ADVANCED
         )
 
-        assert result["type"] == data_entry_flow.RESULT_TYPE_CREATE_ENTRY
+        assert result["type"] == FlowResultType.CREATE_ENTRY
         assert result["title"] == DUMMY_DATA_SIMPLE[CONF_NAME]
 
 
@@ -191,7 +189,7 @@ async def test_step_advanced_invalid_color(hass: HomeAssistant) -> None:
             data=DUMMY_DATA_ADVANCED_INVALID_COLOR,
         )
 
-        assert result["type"] == data_entry_flow.RESULT_TYPE_FORM
+        assert result["type"] == FlowResultType.FORM
         assert result["step_id"] == "advanced"
         assert result["errors"] == {"base": "invalid_color"}
 
@@ -212,7 +210,7 @@ async def test_options_flow_init(hass: HomeAssistant) -> None:
         await hass.config_entries.async_setup(config_entry.entry_id)
         await hass.async_block_till_done()
 
-        assert result["type"] == data_entry_flow.RESULT_TYPE_FORM
+        assert result["type"] == FlowResultType.FORM
         assert result["step_id"] == "init"
 
         result = await hass.config_entries.options.async_configure(
@@ -220,7 +218,7 @@ async def test_options_flow_init(hass: HomeAssistant) -> None:
             user_input=DUMMY_ENTRY_CHANGE,
         )
 
-        assert result["type"] == data_entry_flow.RESULT_TYPE_CREATE_ENTRY
+        assert result["type"] == FlowResultType.CREATE_ENTRY
         assert dict(config_entry.options) == DUMMY_ENTRY_UPDATED
 
 
@@ -240,7 +238,7 @@ async def test_options_flow_invalid_template(hass: HomeAssistant) -> None:
         await hass.config_entries.async_setup(config_entry.entry_id)
         await hass.async_block_till_done()
 
-        assert result["type"] == data_entry_flow.RESULT_TYPE_FORM
+        assert result["type"] == FlowResultType.FORM
         assert result["step_id"] == "init"
 
         result = await hass.config_entries.options.async_configure(
@@ -248,7 +246,7 @@ async def test_options_flow_invalid_template(hass: HomeAssistant) -> None:
             user_input=DUMMY_DATA_SIMPLE_INVALID_TEMPLATE,
         )
 
-        assert result["type"] == data_entry_flow.RESULT_TYPE_FORM
+        assert result["type"] == FlowResultType.FORM
         assert result["step_id"] == "init"
         assert result["errors"] == {"base": "invalid_template"}
 
@@ -269,7 +267,7 @@ async def test_options_flow_to_advanced(hass: HomeAssistant) -> None:
         await hass.config_entries.async_setup(config_entry.entry_id)
         await hass.async_block_till_done()
 
-        assert result["type"] == data_entry_flow.RESULT_TYPE_FORM
+        assert result["type"] == FlowResultType.FORM
         assert result["step_id"] == "init"
 
         result = await hass.config_entries.options.async_configure(
@@ -277,7 +275,7 @@ async def test_options_flow_to_advanced(hass: HomeAssistant) -> None:
             user_input=DUMMY_DATA_SIMPLE_ADVANCED,
         )
 
-        assert result["type"] == data_entry_flow.RESULT_TYPE_FORM
+        assert result["type"] == FlowResultType.FORM
         assert result["step_id"] == "advanced"
         assert result["errors"] == {}
 
@@ -298,7 +296,7 @@ async def test_options_flow_advanced(hass: HomeAssistant) -> None:
         await hass.config_entries.async_setup(config_entry.entry_id)
         await hass.async_block_till_done()
 
-        assert result["type"] == data_entry_flow.RESULT_TYPE_FORM
+        assert result["type"] == FlowResultType.FORM
         assert result["step_id"] == "init"
 
         result = await hass.config_entries.options.async_configure(
@@ -306,7 +304,7 @@ async def test_options_flow_advanced(hass: HomeAssistant) -> None:
             user_input=DUMMY_DATA_SIMPLE_ADVANCED,
         )
 
-        assert result["type"] == data_entry_flow.RESULT_TYPE_FORM
+        assert result["type"] == FlowResultType.FORM
         assert result["step_id"] == "advanced"
         assert result["errors"] == {}
 
@@ -315,7 +313,7 @@ async def test_options_flow_advanced(hass: HomeAssistant) -> None:
             user_input=DUMMY_ENTRY_ADVANCED_CHANGE,
         )
 
-        assert result["type"] == data_entry_flow.RESULT_TYPE_CREATE_ENTRY
+        assert result["type"] == FlowResultType.CREATE_ENTRY
         assert dict(config_entry.options) == DUMMY_ENTRY_ADVANCED_UPDATED
 
 
@@ -335,7 +333,7 @@ async def test_options_flow_advanced_invalid_color(hass: HomeAssistant) -> None:
         await hass.config_entries.async_setup(config_entry.entry_id)
         await hass.async_block_till_done()
 
-        assert result["type"] == data_entry_flow.RESULT_TYPE_FORM
+        assert result["type"] == FlowResultType.FORM
         assert result["step_id"] == "init"
 
         result = await hass.config_entries.options.async_configure(
@@ -343,7 +341,7 @@ async def test_options_flow_advanced_invalid_color(hass: HomeAssistant) -> None:
             user_input=DUMMY_DATA_SIMPLE_ADVANCED,
         )
 
-        assert result["type"] == data_entry_flow.RESULT_TYPE_FORM
+        assert result["type"] == FlowResultType.FORM
         assert result["step_id"] == "advanced"
         assert result["errors"] == {}
 
@@ -352,6 +350,6 @@ async def test_options_flow_advanced_invalid_color(hass: HomeAssistant) -> None:
             user_input=DUMMY_DATA_ADVANCED_INVALID_COLOR,
         )
 
-        assert result["type"] == data_entry_flow.RESULT_TYPE_FORM
+        assert result["type"] == FlowResultType.FORM
         assert result["step_id"] == "advanced"
         assert result["errors"] == {"base": "invalid_color"}
