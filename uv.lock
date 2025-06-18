@@ -1814,6 +1814,7 @@ dependencies = [
 [package.dev-dependencies]
 dev = [
     { name = "aiohttp-cors" },
+    { name = "homeassistant" },
     { name = "pytest-homeassistant-custom-component" },
 ]
 lint = [
@@ -1829,6 +1830,7 @@ requires-dist = [
 [package.metadata.requires-dev]
 dev = [
     { name = "aiohttp-cors" },
+    { name = "homeassistant" },
     { name = "pytest-homeassistant-custom-component", specifier = "==0.13.232" },
 ]
 lint = [{ name = "ruff", specifier = ">=0.12.0" }]
