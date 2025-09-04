@@ -42,11 +42,16 @@ DUMMY_ENTRY: dict[str, Any] = {
     CONF_BACKGROUND_COLOR: DEFAULT_BACKGROUND_COLOR,
 }
 
+DUMMY_ENTRY_UTF8 = {
+        **DUMMY_ENTRY,
+        CONF_VALUE_TEMPLATE: "Utf8: ą, ę, ń"
+}
+
 @pytest.mark.asyncio
 async def test_image(hass: HomeAssistant) -> None:
     """Test the creation and values of the image."""
     config_entry: MockConfigEntry = MockConfigEntry(
-        domain=DOMAIN, title="NINA", data=DUMMY_ENTRY
+        domain=DOMAIN, title="QR", data=DUMMY_ENTRY
     )
 
     entity_registry: er = er.async_get(hass)
@@ -68,3 +73,21 @@ async def test_image(hass: HomeAssistant) -> None:
     assert state.attributes.get(ATTR_BACKGROUND_COLOR) == DEFAULT_BACKGROUND_COLOR
 
     assert entry.unique_id == f"{config_entry.entry_id}-qr-code"
+
+@pytest.mark.asyncio
+async def test_support_utf8_chars(hass: HomeAssistant) -> None:
+    """Test if utf-8 chars are supported."""
+    config_entry: MockConfigEntry = MockConfigEntry(
+        domain=DOMAIN, title="QR", data=DUMMY_ENTRY_UTF8
+    )
+
+    config_entry.add_to_hass(hass)
+
+    await hass.config_entries.async_setup(config_entry.entry_id)
+    await hass.async_block_till_done()
+
+    assert config_entry.state == ConfigEntryState.LOADED
+
+    state = hass.states.get("image.test_qr_code")
+
+    assert state.attributes.get(ATTR_TEXT) == "Utf8: ą, ę, ń"
