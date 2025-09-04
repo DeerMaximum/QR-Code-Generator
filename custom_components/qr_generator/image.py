@@ -122,7 +122,7 @@ class QRImage(ImageEntity):
         _LOGGER.debug('Print "%s" with: %s', self.name, self.rendered_template.result())
 
         code = pyqrcode.create(
-            self.rendered_template.result(), error=self.error_correction
+            self.rendered_template.result(), error=self.error_correction, encoding='utf-8'
         )
 
         self.image = io.BytesIO()
