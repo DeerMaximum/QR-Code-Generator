@@ -12,6 +12,7 @@ from homeassistant.core import callback
 from homeassistant.data_entry_flow import FlowResult
 from homeassistant.exceptions import TemplateError
 from homeassistant.helpers import config_validation as cv, template
+from homeassistant.helpers.selector import TextSelector, TextSelectorConfig, TextSelectorType
 
 from .const import (
     CONF_ADVANCED,
@@ -42,7 +43,7 @@ def get_schema(config: dict[str, Any] | None = None) -> vol.Schema:
     return vol.Schema(
         {
             vol.Required(CONF_NAME, default=default_name): cv.string,
-            vol.Required(CONF_VALUE_TEMPLATE, default=default_value): cv.string,
+            vol.Required(CONF_VALUE_TEMPLATE, default=default_value): TextSelector(TextSelectorConfig(type=TextSelectorType.TEXT, multiline=True)),
             vol.Optional(CONF_ADVANCED, default=False): cv.boolean,
         }
     )
