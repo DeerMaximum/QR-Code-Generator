@@ -1,6 +1,6 @@
 [project]
 name = "qr_generator"
-version = "2.1.18"
+version = "2.1.19"
 description = "This integration allows to create QR Codes with static or dynamic content."
 readme = "README.md"
 license = "MIT"
