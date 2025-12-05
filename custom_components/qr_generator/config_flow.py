@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import re
+from copy import deepcopy
 from typing import Any
 
 import voluptuous as vol
@@ -153,22 +154,19 @@ class ConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
         config_entry: config_entries.ConfigEntry,
     ) -> OptionsFlowHandler:
         """Get the options flow for this handler."""
-        return OptionsFlowHandler(config_entry)
+        return OptionsFlowHandler()
 
 
 class OptionsFlowHandler(config_entries.OptionsFlow):
     """Handle a option flow for QR Generator."""
-
-    def __init__(self, config_entry: config_entries.ConfigEntry) -> None:
-        """Initialize options flow."""
-        self.config_entry = config_entry
-        self.data = dict(self.config_entry.data)
 
     async def async_step_init(
         self, user_input: dict[str, Any] | None = None
     ) -> FlowResult:
         """Handle options flow."""
         errors: dict[str, Any] = {}
+
+        data = deepcopy(dict(self.config_entry.data))
 
         if user_input is not None and not errors:
 
@@ -179,18 +177,18 @@ class OptionsFlowHandler(config_entries.OptionsFlow):
             except TemplateError:
                 errors["base"] = "invalid_template"
                 return self.async_show_form(
-                    step_id="init", data_schema=get_schema(self.data), errors=errors
+                    step_id="init", data_schema=get_schema(data), errors=errors
                 )
 
-            self.data.update(user_input)
+            data.update(user_input)
 
             if user_input[CONF_ADVANCED]:
                 return await self.async_step_advanced()
 
-            return self.async_create_entry(title="", data=self.data)
+            return self.async_create_entry(title="", data=data)
 
         return self.async_show_form(
-            step_id="init", data_schema=get_schema(self.data), errors=errors
+            step_id="init", data_schema=get_schema(data), errors=errors
         )
 
     async def async_step_advanced(
@@ -199,20 +197,22 @@ class OptionsFlowHandler(config_entries.OptionsFlow):
         """Step for advanced settings."""
         errors: dict[str, Any] = {}
 
+        data = deepcopy(dict(self.config_entry.data))
+
         if user_input is not None and not errors:
             regex = re.compile(HEX_COLOR_REGEX)
 
             if regex.match(user_input[CONF_COLOR]) and regex.match(
                 user_input[CONF_BACKGROUND_COLOR]
             ):
-                self.data.update(user_input)
+                data.update(user_input)
 
-                return self.async_create_entry(title="", data=self.data)
+                return self.async_create_entry(title="", data=data)
 
             errors["base"] = "invalid_color"
 
         return self.async_show_form(
             step_id="advanced",
-            data_schema=get_schema_advanced(self.data),
+            data_schema=get_schema_advanced(data),
             errors=errors,
         )
