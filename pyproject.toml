@@ -34,8 +34,8 @@ repository = "https://github.com/DeerMaximum/QR-Code-Generator"
 [dependency-groups]
 dev = [
     "aiohttp_cors",
-    "homeassistant",
-    "pytest-homeassistant-custom-component==0.13.277"
+    "homeassistant==2026.2.0b1",
+    "pytest-homeassistant-custom-component"
 ]
 lint = [
     "ruff>=0.12.0"
