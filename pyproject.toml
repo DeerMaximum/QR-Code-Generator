@@ -38,11 +38,14 @@ dev = [
     "pytest-homeassistant-custom-component"
 ]
 lint = [
-    "ruff>=0.12.0"
+    "ruff>=0.16.0"
 ]
 
 [tool.ruff]
 preview = true
+
+[tool.ruff.lint]
+ignore = ["EXE002"]
 
 [tool.ruff.lint.isort]
 case-sensitive = true

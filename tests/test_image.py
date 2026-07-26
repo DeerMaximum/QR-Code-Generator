@@ -2,12 +2,10 @@
 from typing import Any
 
 import pytest
-
 from homeassistant.config_entries import ConfigEntryState
 from homeassistant.const import CONF_NAME, CONF_VALUE_TEMPLATE
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers import entity_registry as er
-
 from pytest_homeassistant_custom_component.common import MockConfigEntry
 
 from custom_components.qr_generator.const import (

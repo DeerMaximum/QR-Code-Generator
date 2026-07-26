@@ -5,20 +5,18 @@ from __future__ import annotations
 import io
 from typing import Any
 
-from PIL import ImageColor
 import pyqrcode
-
-from homeassistant.util import dt as dt_util
+from PIL import ImageColor
 from homeassistant.components.image import ImageEntity
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import CONF_NAME, CONF_VALUE_TEMPLATE
-from homeassistant.core import HomeAssistant, callback, Event, EventStateChangedData
+from homeassistant.core import Event, EventStateChangedData, HomeAssistant, callback
 from homeassistant.helpers import template
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.event import async_track_state_change_event
+from homeassistant.util import dt as dt_util
 
 from .const import (
-    _LOGGER,
     ATTR_BACKGROUND_COLOR,
     ATTR_BORDER,
     ATTR_COLOR,
@@ -35,6 +33,7 @@ from .const import (
     DEFAULT_COLOR,
     DEFAULT_ERROR_CORRECTION,
     DEFAULT_SCALE,
+    _LOGGER,
 )
 
 
