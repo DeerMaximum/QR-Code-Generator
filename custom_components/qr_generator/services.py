@@ -1,15 +1,14 @@
 import os
 
+import voluptuous as vol
 from homeassistant.components.image import ImageEntity
 from homeassistant.const import ATTR_ENTITY_ID
 from homeassistant.core import HomeAssistant, ServiceCall
 from homeassistant.exceptions import HomeAssistantError
+from homeassistant.helpers import config_validation as cv
 from homeassistant.helpers.entity_platform import async_get_platforms
 
 from custom_components.qr_generator import DOMAIN
-import voluptuous as vol
-from homeassistant.helpers import config_validation as cv
-
 from custom_components.qr_generator.const import ATTR_FILENAME, _LOGGER
 
 

@@ -6,14 +6,18 @@ from copy import deepcopy
 from typing import Any
 
 import voluptuous as vol
-
 from homeassistant import config_entries
 from homeassistant.const import CONF_NAME, CONF_VALUE_TEMPLATE
 from homeassistant.core import callback
 from homeassistant.data_entry_flow import FlowResult
 from homeassistant.exceptions import TemplateError
-from homeassistant.helpers import config_validation as cv, template
-from homeassistant.helpers.selector import TextSelector, TextSelectorConfig, TextSelectorType
+from homeassistant.helpers import config_validation as cv
+from homeassistant.helpers import template
+from homeassistant.helpers.selector import (
+    TextSelector,
+    TextSelectorConfig,
+    TextSelectorType,
+)
 
 from .const import (
     CONF_ADVANCED,
@@ -85,7 +89,7 @@ class ConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
 
     VERSION: int = 1
 
-    override_config: dict[str, Any] = {}
+    override_config: dict[str, Any] = {}  # ruff: ignore[mutable-class-default]
 
     def __init__(self) -> None:
         """Initialize the config flow."""
