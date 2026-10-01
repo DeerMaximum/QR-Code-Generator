@@ -2183,7 +2183,7 @@ lint = [
 [package.metadata]
 requires-dist = [
     { name = "pypng", specifier = "==0.20220715.0" },
-    { name = "pyqrcode", specifier = "==1.2.1" },
+    { name = "pyqrcode", specifier = ">=1.2.1" },
 ]
 
 [package.metadata.requires-dev]
