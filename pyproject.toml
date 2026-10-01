@@ -11,7 +11,7 @@ authors = [
 maintainers = [
     { name = "DeerMaximum", email = "git983456@parabelmail.de" },
 ]
-requires-python = ">=3.13.2"
+requires-python = ">=3.14.2"
 keywords = [
     "homeassistant",
     "qr",
@@ -34,7 +34,7 @@ repository = "https://github.com/DeerMaximum/QR-Code-Generator"
 [dependency-groups]
 dev = [
     "aiohttp_cors",
-    "homeassistant==2026.2.0b1",
+    "homeassistant==2026.10.0b0",
     "pytest-homeassistant-custom-component"
 ]
 lint = [
