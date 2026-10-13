@@ -40,7 +40,7 @@ dev = [
     "mashumaro>=3.22",
 ]
 lint = [
-    "ruff>=0.16.0"
+    "ruff>=0.17.0"
 ]
 
 [tool.ruff]
