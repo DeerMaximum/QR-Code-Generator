@@ -21,11 +21,6 @@ from custom_components.qr_generator.const import (
 from .test_image import DUMMY_ENTRY
 
 
-@pytest.fixture(autouse=True)
-async def mock_recorder_before_hass(async_setup_recorder_instance) -> None:
-    """Set up the recorder before hass, which conftest's autouse fixture starts."""
-
-
 @pytest.mark.asyncio
 async def test_text_not_recorded(recorder_mock: Recorder, hass: HomeAssistant) -> None:
     """Test that the content, which can hold a secret, isn't recorded."""

@@ -52,8 +52,6 @@ async def async_setup_entry(
 class QRImage(ImageEntity):
     """Representation of a QR code."""
 
-    # The content can hold a secret (e.g. a Wi-Fi password), so keep it out
-    # of the recorder's database.
     _unrecorded_attributes = frozenset({ATTR_TEXT})
 
     def __init__(self, entry: ConfigEntry, hass: HomeAssistant) -> None:
