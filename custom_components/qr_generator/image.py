@@ -52,6 +52,8 @@ async def async_setup_entry(
 class QRImage(ImageEntity):
     """Representation of a QR code."""
 
+    _unrecorded_attributes = frozenset({ATTR_TEXT})
+
     def __init__(self, entry: ConfigEntry, hass: HomeAssistant) -> None:
         """Initialize the camera."""
         super().__init__(hass)
