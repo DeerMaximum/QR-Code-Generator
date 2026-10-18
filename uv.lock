@@ -2162,7 +2162,7 @@ wheels = [
 
 [[package]]
 name = "qr-generator"
-version = "2.1.20"
+version = "2.1.21"
 source = { virtual = "." }
 dependencies = [
     { name = "pypng" },
