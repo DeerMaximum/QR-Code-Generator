@@ -9,7 +9,7 @@ from homeassistant.config_entries import SOURCE_USER
 from homeassistant.const import CONF_NAME, CONF_VALUE_TEMPLATE
 from homeassistant.core import HomeAssistant
 from homeassistant.data_entry_flow import FlowResultType
-from pytest_homeassistant_custom_component.common import MockConfigEntry
+from pytest_homeassistant.common import MockConfigEntry
 
 from custom_components.qr_generator.config_flow import ConfigFlow
 from custom_components.qr_generator.const import (

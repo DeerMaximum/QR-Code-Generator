@@ -6,8 +6,8 @@ from homeassistant.components.recorder import Recorder
 from homeassistant.components.recorder.history import get_significant_states
 from homeassistant.core import HomeAssistant
 from homeassistant.util import dt as dt_util
-from pytest_homeassistant_custom_component.common import MockConfigEntry
-from pytest_homeassistant_custom_component.components.recorder.common import (
+from pytest_homeassistant.common import MockConfigEntry
+from pytest_homeassistant.components.recorder.common import (
     async_wait_recording_done,
 )
 
