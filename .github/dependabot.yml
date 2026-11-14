@@ -8,3 +8,14 @@ updates:
     directory: "/"
     schedule:
       interval: daily
+    groups:
+      home-assistant:
+        applies-to: version-updates
+        patterns:
+          - "homeassistant"
+          - "pytest-homeassistant"
+      home-assistant-security:
+        applies-to: security-updates
+        patterns:
+          - "homeassistant"
+          - "pytest-homeassistant"
