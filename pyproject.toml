@@ -34,14 +34,24 @@ repository = "https://github.com/DeerMaximum/QR-Code-Generator"
 [dependency-groups]
 dev = [
     "aiohttp_cors",
-    "homeassistant==2026.10.0b0",
-    "pytest-homeassistant-custom-component",
+    "homeassistant==2026.11.1",
+    "pytest-homeassistant==2026.11.1",
+    "pytest-cov",
+    "pytest-timeout",
     #Fix UnserializableField exception
     "mashumaro>=3.22",
 ]
 lint = [
     "ruff>=0.17.0"
 ]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "function"
+# Let Home Assistant install its httpx alias before respx is imported.
+addopts = "-p no:respx"
+pythonpath = ["."]
+testpaths = ["tests"]
 
 [tool.ruff]
 preview = true
